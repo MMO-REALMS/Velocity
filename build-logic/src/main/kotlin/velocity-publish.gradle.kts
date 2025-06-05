@@ -5,14 +5,14 @@ plugins {
 
 extensions.configure<PublishingExtension> {
     repositories {
-        maven {
-            credentials(PasswordCredentials::class.java)
-
-            name = if (version.toString().endsWith("SNAPSHOT")) "paperSnapshots" else "paper" // "paper" is seemingly not defined
-            val base = "https://artifactory.papermc.io/artifactory"
-            val releasesRepoUrl = "$base/releases/"
-            val snapshotsRepoUrl = "$base/snapshots/"
-            setUrl(if (version.toString().endsWith("SNAPSHOT")) snapshotsRepoUrl else releasesRepoUrl)
+        if (project.properties["generic.publish"] == "true") {
+            maven(url = (project.findProperty("generic.url") ?: "") as String) {
+                name = "Generic"
+                credentials(PasswordCredentials::class) {
+                    username = (project.findProperty("generic.auth.username") ?: "") as String
+                    password = (project.findProperty("generic.auth.password") ?: "") as String
+                }
+            }
         }
     }
     publications {
