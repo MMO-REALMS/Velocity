@@ -53,6 +53,7 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
@@ -225,7 +226,33 @@ public class VelocityCommandManager implements CommandManager {
       final String cmdLine, final CommandExecuteEvent.InvocationInfo invocationInfo) {
     Preconditions.checkNotNull(source, "source");
     Preconditions.checkNotNull(cmdLine, "cmdLine");
-    return eventManager.fire(new CommandExecuteEvent(source, cmdLine, invocationInfo));
+    CompletableFuture<CommandExecuteEvent> fire = eventManager.fire(new CommandExecuteEvent(source, cmdLine, invocationInfo));
+	  try {
+          System.out.println(fire.isDone());
+		  System.out.println(fire.get().getResult());
+		  System.out.println(fire.get().getResult().isForwardToServer());
+          if(fire.get().getResult().isForwardToServer()){
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+            System.out.println("HEREEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE");
+          }
+	  } catch (InterruptedException | ExecutionException e) {
+		  throw new RuntimeException(e);
+	  }
+	  return fire;
   }
 
   private boolean executeImmediately0(final CommandSource source, final ParseResults<CommandSource> parsed) {
@@ -264,6 +291,7 @@ public class VelocityCommandManager implements CommandManager {
 
   @Override
   public CompletableFuture<Boolean> executeAsync(final CommandSource source, final String cmdLine) {
+    System.out.println(";;1;;");
     Preconditions.checkNotNull(source, "source");
     Preconditions.checkNotNull(cmdLine, "cmdLine");
 
@@ -275,6 +303,7 @@ public class VelocityCommandManager implements CommandManager {
     return callCommandEvent(source, cmdLine, invocationInfo).thenComposeAsync(event -> {
       CommandExecuteEvent.CommandResult commandResult = event.getResult();
       if (commandResult.isForwardToServer() || !commandResult.isAllowed()) {
+        System.out.println("{{1}}");
         return CompletableFuture.completedFuture(false);
       }
       final ParseResults<CommandSource> parsed = this.parse(
@@ -288,6 +317,7 @@ public class VelocityCommandManager implements CommandManager {
   @Override
   public CompletableFuture<Boolean> executeImmediatelyAsync(
       final CommandSource source, final String cmdLine) {
+    System.out.println(";;2;;");
     Preconditions.checkNotNull(source, "source");
     Preconditions.checkNotNull(cmdLine, "cmdLine");
 

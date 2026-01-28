@@ -51,6 +51,7 @@ public class LegacyCommandHandler extends RateLimitedCommandHandler<LegacyChatPa
       }
       String commandToRun = result.getCommand().orElse(command);
       if (result.isForwardToServer()) {
+        System.out.println("{{3}}");
         return CompletableFuture.completedFuture(this.player.getChatBuilderFactory().builder()
             .message("/" + commandToRun)
             .toServer());

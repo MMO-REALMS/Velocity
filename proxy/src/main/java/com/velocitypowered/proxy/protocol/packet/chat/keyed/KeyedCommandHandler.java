@@ -64,6 +64,7 @@ public class KeyedCommandHandler extends RateLimitedCommandHandler<KeyedPlayerCo
 
       String commandToRun = result.getCommand().orElse(packet.getCommand());
       if (result.isForwardToServer()) {
+        System.out.println("{{2}}");
         ChatBuilderV2 write = this.player.getChatBuilderFactory()
             .builder()
             .setTimestamp(packet.getTimestamp())
